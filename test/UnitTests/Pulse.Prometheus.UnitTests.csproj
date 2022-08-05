@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Authors>dongrote;TheSilentRinger</Authors>
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>Pulse.Prometheus.UnitTests</RootNamespace>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)..\..\common.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+	  <PackageReference Include="FluentAssertions" Version="5.10.3" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+	  <PackageReference Include="Moq" Version="4.16.1" />
+	  <PackageReference Include="MSTest.TestAdapter" Version="2.2.4" />
+	  <PackageReference Include="MSTest.TestFramework" Version="2.2.4" />
+	  <PackageReference Include="coverlet.collector" Version="3.1.0" />
+	  <PackageReference Include="pulse" Version="1.0.0-alpha.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Pulse.Prometheus.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\..\stylecop.json" />
+  </ItemGroup>
+</Project>
