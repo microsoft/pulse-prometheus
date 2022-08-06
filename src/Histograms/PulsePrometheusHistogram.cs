@@ -7,7 +7,6 @@
 namespace Pulse.Prometheus.Histograms
 {
     using Pulse.Interfaces;
-    using Pulse.Prometheus.Adapters;
     using Pulse.Prometheus.Interfaces;
     using Pulse.Prometheus.Timers;
 
@@ -16,6 +15,11 @@ namespace Pulse.Prometheus.Histograms
     /// </summary>
     public class PulsePrometheusHistogram : IHistogram
     {
+        /// <summary>
+        /// Default buckets.
+        /// </summary>
+        public static readonly double[] DefaultBuckets = { .005, .01, .025, .05, .075, .1, .25, .5, .75, 1, 2.5, 5, 7.5, 10 };
+
         private readonly IPrometheusHistogramAdapter histogram;
 
         /// <summary>

@@ -7,6 +7,7 @@
 using PrometheusCounterConfiguration = Prometheus.CounterConfiguration;
 using PrometheusGaugeConfiguration = Prometheus.GaugeConfiguration;
 using PrometheusHistogramConfiguration = Prometheus.HistogramConfiguration;
+using PrometheusQuantileEpsilonPair = Prometheus.QuantileEpsilonPair;
 using PrometheusSummary = Prometheus.Summary;
 using PrometheusSummaryConfiguration = Prometheus.SummaryConfiguration;
 
@@ -14,6 +15,8 @@ namespace Pulse.Prometheus.Factories
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
+    using Pulse.Configurations;
     using Pulse.Interfaces;
     using Pulse.Prometheus.Adapters;
     using Pulse.Prometheus.Counters;
@@ -27,8 +30,6 @@ namespace Pulse.Prometheus.Factories
     /// </summary>
     public class PulseMetricFactory : IMetricFactory
     {
-        private static readonly bool SuppressInitialValue = false;
-
         private readonly IPrometheusMetricFactoryAdapter prometheusFactory;
 
         /// <summary>
@@ -41,86 +42,104 @@ namespace Pulse.Prometheus.Factories
         }
 
         /// <inheritdoc/>
-        public ICounter CreateCounter(string name, string desc, params string[] labelNames)
+        public ICounter CreateCounter(string name, string desc, CounterConfiguration config = null)
         {
-            return CreateCounterWithStaticLabels(name, desc, null, labelNames);
-        }
-
-        /// <inheritdoc/>
-        public ICounter CreateCounterWithStaticLabels(string name, string desc, Dictionary<string, string> staticLabels, params string[] labelNames)
-        {
-            var config = new PrometheusCounterConfiguration()
+            if (config == null)
             {
-                StaticLabels = staticLabels,
-                LabelNames = GetLabelNames(labelNames),
-                SuppressInitialValue = SuppressInitialValue,
+                return new PulsePrometheusCounter(new PrometheusCounterAdapter(prometheusFactory.CreateCounter(name, desc)));
+            }
+
+            var prometheusCounterConfig = new PrometheusCounterConfiguration()
+            {
+                LabelNames = config.MutableLabelNames,
+                StaticLabels = config.ImmutableLabels,
+                SuppressInitialValue = !config.PublishOnCreation,
             };
 
-            return new PulsePrometheusCounter(new PrometheusCounterAdapter(prometheusFactory.CreateCounter(name, desc, config)));
+            return new PulsePrometheusCounter(new PrometheusCounterAdapter(prometheusFactory.CreateCounter(name, desc, prometheusCounterConfig)));
         }
 
         /// <inheritdoc/>
-        public IGauge CreateGauge(string name, string desc, params string[] labelNames)
+        public IGauge CreateGauge(string name, string desc, GaugeConfiguration config = null)
         {
-            return CreateGaugeWithStaticLabels(name, desc, null, labelNames);
-        }
-
-        /// <inheritdoc/>
-        public IGauge CreateGaugeWithStaticLabels(string name, string desc, Dictionary<string, string> staticLabels, params string[] labelNames)
-        {
-            var config = new PrometheusGaugeConfiguration()
+            if (config == null)
             {
-                StaticLabels = staticLabels,
-                LabelNames = GetLabelNames(labelNames),
-                SuppressInitialValue = SuppressInitialValue,
+                return new PulsePrometheusGauge(new PrometheusGaugeAdapter(prometheusFactory.CreateGauge(name, desc)));
+            }
+
+            var prometheusGaugeConfig = new PrometheusGaugeConfiguration()
+            {
+                LabelNames = config.MutableLabelNames,
+                StaticLabels = config.ImmutableLabels,
+                SuppressInitialValue = !config.PublishOnCreation,
             };
 
-            return new PulsePrometheusGauge(new PrometheusGaugeAdapter(prometheusFactory.CreateGauge(name, desc, config)));
+            return new PulsePrometheusGauge(new PrometheusGaugeAdapter(prometheusFactory.CreateGauge(name, desc, prometheusGaugeConfig)));
         }
 
         /// <inheritdoc/>
-        public IHistogram CreateHistogram(string name, string desc, double[] buckets, params string[] labelNames)
+        public IHistogram CreateHistogram(string name, string desc, HistogramConfiguration config = null)
         {
-            return CreateHistogramWithStaticLabels(name, desc, buckets, null, labelNames);
-        }
-
-        /// <inheritdoc/>
-        public IHistogram CreateHistogramWithStaticLabels(string name, string desc, double[] buckets, Dictionary<string, string> staticLabels, params string[] labelNames)
-        {
-            var config = new PrometheusHistogramConfiguration()
+            if (config == null)
             {
-                Buckets = buckets,
-                StaticLabels = staticLabels,
-                LabelNames = GetLabelNames(labelNames),
-                SuppressInitialValue = SuppressInitialValue,
+                return new PulsePrometheusHistogram(new PrometheusHistogramAdapter(prometheusFactory.CreateHistogram(name, desc)));
+            }
+
+            var prometheusHistogramConfig = new PrometheusHistogramConfiguration()
+            {
+                Buckets = config.Buckets ?? PulsePrometheusHistogram.DefaultBuckets,
+                LabelNames = config.MutableLabelNames,
+                StaticLabels = config.ImmutableLabels,
+                SuppressInitialValue = !config.PublishOnCreation,
             };
 
-            return new PulsePrometheusHistogram(new PrometheusHistogramAdapter(prometheusFactory.CreateHistogram(name, desc, config)));
+            return new PulsePrometheusHistogram(new PrometheusHistogramAdapter(prometheusFactory.CreateHistogram(name, desc, prometheusHistogramConfig)));
         }
 
         /// <inheritdoc/>
-        public ISummary CreateSummary(string name, string desc, TimeSpan? maxAge = null, int? ageBuckets = null, int? bufferSize = null, params string[] labelNames)
+        public ISummary CreateSummary(string name, string desc, SummaryConfiguration config = null)
         {
-            return CreateSummaryWithStaticLabels(name, desc, null, maxAge, ageBuckets, bufferSize, labelNames);
-        }
-
-        /// <inheritdoc/>
-        public ISummary CreateSummaryWithStaticLabels(string name, string desc, Dictionary<string, string> staticLabels, TimeSpan? maxAge = null, int? ageBuckets = null, int? bufferSize = null, params string[] labelNames)
-        {
-            var config = new PrometheusSummaryConfiguration()
+            if (config == null)
             {
-                Objectives = null,
-                MaxAge = maxAge ?? PrometheusSummary.DefMaxAge,
-                AgeBuckets = ageBuckets ?? PrometheusSummary.DefAgeBuckets,
-                BufferSize = bufferSize ?? PrometheusSummary.DefBufCap,
-                StaticLabels = staticLabels,
-                LabelNames = GetLabelNames(labelNames),
-                SuppressInitialValue = SuppressInitialValue,
-            };
+                return new PulsePrometheusSummary(new PrometheusSummaryAdapter(prometheusFactory.CreateSummary(name, desc)));
+            }
 
-            return new PulsePrometheusSummary(new PrometheusSummaryAdapter(prometheusFactory.CreateSummary(name, desc, config)));
+            var prometheusSummaryConfig = new PrometheusSummaryConfiguration();
+
+            if (config.AgeBuckets != null)
+            {
+                prometheusSummaryConfig.AgeBuckets = Convert.ToInt32(config.AgeBuckets);
+            }
+
+            if (config.BufferSize != null)
+            {
+                prometheusSummaryConfig.BufferSize = Convert.ToInt32(config.BufferSize);
+            }
+
+            prometheusSummaryConfig.LabelNames = config.MutableLabelNames;
+            prometheusSummaryConfig.MaxAge = config.MaxAge ?? PrometheusSummary.DefMaxAge;
+            prometheusSummaryConfig.Objectives = ConvertObjectivesToQuantileEpsilonPairs(config.Objectives);
+            prometheusSummaryConfig.StaticLabels = config.ImmutableLabels;
+            prometheusSummaryConfig.SuppressInitialValue = !config.PublishOnCreation;
+
+            return new PulsePrometheusSummary(new PrometheusSummaryAdapter(prometheusFactory.CreateSummary(name, desc, prometheusSummaryConfig)));
         }
 
-        private static string[] GetLabelNames(string[] labelNames) => labelNames.Length == 0 ? null : labelNames;
+        private static IReadOnlyList<PrometheusQuantileEpsilonPair> ConvertObjectivesToQuantileEpsilonPairs(IReadOnlyList<(double quantile, double epsilon)> objectives)
+        {
+            if (objectives == null)
+            {
+                return null;
+            }
+
+            IList<PrometheusQuantileEpsilonPair> prometheusObjectives = new List<PrometheusQuantileEpsilonPair>();
+
+            for (int i = 0; i < objectives.Count; i++)
+            {
+                prometheusObjectives.Add(new PrometheusQuantileEpsilonPair(objectives[i].quantile, objectives[i].epsilon));
+            }
+
+            return ImmutableList.CreateRange(prometheusObjectives);
+        }
     }
 }
