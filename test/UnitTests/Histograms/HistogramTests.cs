@@ -26,8 +26,6 @@ namespace Pulse.Prometheus.UnitTests.Histograms
 
         private static readonly Mock<IPrometheusHistogramAdapter> MockLabelledPrometheusHistogram = new ();
 
-        private static readonly Mock<PulsePrometheusHistogram> MockHistogram = new ();
-
         private static IHistogram histogram;
 
         /// <summary>
