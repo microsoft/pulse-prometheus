@@ -17,13 +17,13 @@ jobs:
     - name: Build
       run: dotnet build src --configuration Release
     - name: Component Tests
-      run: dotnet test test/ComponentTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput='../coverage/ComponentTestsCoverage.json'
+      run: dotnet test test/ComponentTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput='./../coverage/ComponentTestsCoverage.json'
     - name: Unit Tests
-      run: dotnet test test/UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput='../coverage/UnitTestsCoverage.json'
+      run: dotnet test test/UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput='./../coverage/UnitTestsCoverage.json'
     - name: Upload net5 Code Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        directory: ./test/coverage/
+        directory: ./../coverage/
         fail_ci_if_error: true
         files: ./ComponentTestsCoverage.net5.0.json,./UnitTestsCoverage.net5.0.json
         name: net5-code-coverage
@@ -32,9 +32,9 @@ jobs:
     - name: Upload net6 Code Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        directory: ./test/coverage/
+        directory: ./../coverage/
         fail_ci_if_error: true
-        files: ComponentTestsCoverage.net6.0.json,UnitTestsCoverage.net6.0.json
+        files: ./ComponentTestsCoverage.net6.0.json,./UnitTestsCoverage.net6.0.json
         name: net6-code-coverage
         path_to_write_report: ../coverage/codecov_report.txt
         verbose: true
