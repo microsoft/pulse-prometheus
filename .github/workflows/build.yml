@@ -34,7 +34,7 @@ jobs:
       with:
         directory: ./test/coverage/
         fail_ci_if_error: true
-        files: ./ComponentTestsCoverage.net6.0.json,./UnitTestsCoverage.net6.0.json
+        files: ComponentTestsCoverage.net6.0.json,UnitTestsCoverage.net6.0.json
         name: net6-code-coverage
         path_to_write_report: ../coverage/codecov_report.txt
         verbose: true
