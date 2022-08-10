@@ -23,18 +23,16 @@ jobs:
     - name: Upload net5 Code Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        directory: ./test/coverage/
         fail_ci_if_error: true
-        files: ./ComponentTestsCoverage.net5.0.json,./UnitTestsCoverage.net5.0.json
+        files: ./test/coverage/ComponentTestsCoverage.net5.0.json,./test/coverage/UnitTestsCoverage.net5.0.json
         name: net5-code-coverage
         path_to_write_report: ../coverage/codecov_report.txt
         verbose: true
     - name: Upload net6 Code Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        directory: ./test/coverage/
         fail_ci_if_error: true
-        files: ./ComponentTestsCoverage.net6.0.json,./UnitTestsCoverage.net6.0.json
+        files: ./test/coverage/ComponentTestsCoverage.net6.0.json,./test/coverage/UnitTestsCoverage.net6.0.json
         name: net6-code-coverage
         path_to_write_report: ../coverage/codecov_report.txt
         verbose: true
