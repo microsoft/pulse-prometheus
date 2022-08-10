@@ -24,13 +24,13 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: true
-        files: ./ComponentTestsCoverage.net5.0.json,./UnitTestsCoverage.net5.0.json
+        files: /home/runner/work/pulse-prometheus/pulse-prometheus/ComponentTestsCoverage.net5.0.json,./UnitTestsCoverage.net5.0.json
         name: net5-code-coverage
         verbose: true
     - name: Upload net6 Code Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: true
-        files: ./ComponentTestsCoverage.net6.0.json,./UnitTestsCoverage.net6.0.json
+        files: /home/runner/work/pulse-prometheus/pulse-prometheus/ComponentTestsCoverage.net6.0.json,./UnitTestsCoverage.net6.0.json
         name: net6-code-coverage
         verbose: true
