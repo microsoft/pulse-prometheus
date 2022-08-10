@@ -260,7 +260,6 @@ FailedExtractions.CountExceptions(() => Extractor.Extract(file), IsExtractionRel
 
 bool IsExtractionRelatedException(Exception ex)
 {
-    
     return ex is ExtractionException; // Only count ExtractionExceptions.
 }
 ```
