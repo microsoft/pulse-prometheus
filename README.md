@@ -51,8 +51,8 @@ You are expected to be familiar with:
 
 1. Configure the endpoint. See [Middleware Extensions](#middleware-extensions).
 1. Register the [IMetricFactory](#metric-factory). See [Dependency Injection](#dependency-injection). Optionally, [create an IMetricFactory](#metric-factory) instead of injecting it.
-1. Use your [IMetricFactory](#metric-factory) to create [Counters](#counter), [Gauges](#gauges), [Histograms](#histogram), and [Summaries](#summary).
-1. Use your metrics to do other cool things like [Track Operation Duration](#tracking-operation-duration), [Count In-Progress Operations](#counting-in-progress-operations), and [Count Exceptions](#counting-exceptions). Also check out how to use [Mutable Labels](#mutable-labels) and [Immutable Labels](#immutable-labels)
+1. Use your [IMetricFactory](#metric-factory) to create [counters](#counter), [gauges](#gauge), [histograms](#histogram), and [summaries](#summary).
+1. Use your metrics to do other cool things like [track operation duration](#tracking-operation-duration), [count in-progress operations](#counting-in-progress-operations), and [count exceptions](#counting-exceptions). Also check out how to use [mutable labels](#mutable-labels) and [immutable labels](#immutable-labels)
 
 ## Middleware Extensions
 
