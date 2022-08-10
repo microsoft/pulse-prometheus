@@ -1,6 +1,7 @@
 # pulse-prometheus
 [![Build Status](https://github.com/microsoft/pulse-prometheus/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/microsoft/pulse-prometheus/actions/workflows/build.yml)
 [![Nuget](https://img.shields.io/nuget/v/pulse.prometheus.svg)](https://www.nuget.org/packages/pulse.prometheus/)
+[![codecov](https://codecov.io/gh/microsoft/pulse-prometheus/branch/metricServerExtensions/graph/badge.svg?token=q1quhRyQgj)](https://codecov.io/gh/microsoft/pulse-prometheus)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/microsoft/pulse-prometheus/blob/main/LICENSE.txt)
 
 pulse-prometheus is a .NET library implementing the [pulse](https://github.com/microsoft/pulse) interface that abstracts the C# [prometheus-net](https://github.com/prometheus-net/prometheus-net) library.
