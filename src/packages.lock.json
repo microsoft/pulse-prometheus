@@ -13,9 +13,9 @@
       },
       "pulse": {
         "type": "Direct",
-        "requested": "[1.0.0-alpha.4, )",
-        "resolved": "1.0.0-alpha.4",
-        "contentHash": "BWH1xA+MIAlHKYkktpUeYjfvIGa5U8waPlbKbAsi65s1jhezjDwGb5VtFfAPuVLtIgIeHsn1r6qkUk99+19AGg==",
+        "requested": "[1.0.0-alpha.5, )",
+        "resolved": "1.0.0-alpha.5",
+        "contentHash": "Qnh5bewnsd1yAGixVEqdGIZ3UW9UbwkjqF+176BrKbJ23sJ1hLhCVax9zUO7FY731fUQLzE4DBTL0pzoFSw4fw==",
         "dependencies": {
           "StyleCop.Analyzers": "1.1.118"
         }
@@ -124,9 +124,9 @@
       },
       "pulse": {
         "type": "Direct",
-        "requested": "[1.0.0-alpha.4, )",
-        "resolved": "1.0.0-alpha.4",
-        "contentHash": "BWH1xA+MIAlHKYkktpUeYjfvIGa5U8waPlbKbAsi65s1jhezjDwGb5VtFfAPuVLtIgIeHsn1r6qkUk99+19AGg==",
+        "requested": "[1.0.0-alpha.5, )",
+        "resolved": "1.0.0-alpha.5",
+        "contentHash": "Qnh5bewnsd1yAGixVEqdGIZ3UW9UbwkjqF+176BrKbJ23sJ1hLhCVax9zUO7FY731fUQLzE4DBTL0pzoFSw4fw==",
         "dependencies": {
           "StyleCop.Analyzers": "1.1.118"
         }
