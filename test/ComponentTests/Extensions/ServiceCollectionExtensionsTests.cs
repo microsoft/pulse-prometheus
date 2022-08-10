@@ -1,4 +1,4 @@
-﻿// <copyright file="ServiceCollectionExtensionTests.cs" company="Microsoft Corporation">
+﻿// <copyright file="ServiceCollectionExtensionsTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation
 // The Microsoft Corporation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
@@ -18,7 +18,7 @@ namespace Pulse.Prometheus.ComponentTests.Extensions
     /// Test class for service extensions.
     /// </summary>
     [TestClass]
-    public class ServiceCollectionExtensionTests
+    public class ServiceCollectionExtensionsTests
     {
         /// <summary>
         /// Test add metrics returns itself.

@@ -4,8 +4,12 @@
 // See the LICENSE file in the project root for more information.
 // </copyright>
 
+using PrometheusMetricServerMiddlewareExtensions = Prometheus.MetricServerMiddlewareExtensions;
+
 namespace Pulse.Prometheus.Extensions
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.DependencyInjection;
     using Pulse.Interfaces;
     using Pulse.Prometheus.Adapters;
@@ -13,7 +17,7 @@ namespace Pulse.Prometheus.Extensions
     using Pulse.Prometheus.Interfaces;
 
     /// <summary>
-    /// Set of Extensions for IServiceCollection interface.
+    /// Set of Extensions for <see cref="IServiceCollection"/> interface.
     /// </summary>
     public static class ServiceCollectionExtensions
     {
