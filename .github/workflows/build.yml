@@ -17,14 +17,14 @@ jobs:
     - name: Build
       run: dotnet build src --configuration Release
     - name: Component Tests
-      run: dotnet test test/ComponentTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput='./ComponentTestsCoverage.json'
+      run: dotnet test test/ComponentTests --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - name: Unit Tests
-      run: dotnet test test/UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput='./UnitTestsCoverage.json'
+      run: dotnet test test/UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - name: Upload net5 Code Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: true
-        files: /home/runner/work/pulse-prometheus/pulse-prometheus/test/ComponentTests/ComponentTestsCoverage.net5.0.json,/home/runner/work/pulse-prometheus/pulse-prometheus/test/UnitTests/UnitTestsCoverage.net5.0.json
+        files: /home/runner/work/pulse-prometheus/pulse-prometheus/test/ComponentTests/coverage.net5.0.opencover.xml,/home/runner/work/pulse-prometheus/pulse-prometheus/test/UnitTests/coverage.net5.0.opencover.xml
         name: net5-code-coverage
         token: ${{ secrets.CODECOV_TOKEN }}
         verbose: true
@@ -32,7 +32,7 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: true
-        files: /home/runner/work/pulse-prometheus/pulse-prometheus/test/ComponentTests/ComponentTestsCoverage.net6.0.json,/home/runner/work/pulse-prometheus/pulse-prometheus/test/UnitTests/UnitTestsCoverage.net6.0.json
+        files: /home/runner/work/pulse-prometheus/pulse-prometheus/test/ComponentTests/coverage.net6.0.opencover.xml,/home/runner/work/pulse-prometheus/pulse-prometheus/test/UnitTests/coverage.net6.0.opencover.xml
         name: net6-code-coverage
         token: ${{ secrets.CODECOV_TOKEN }}
         verbose: true
