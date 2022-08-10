@@ -13,7 +13,7 @@ namespace Pulse.Prometheus.Extensions
     using Pulse.Prometheus.Interfaces;
 
     /// <summary>
-    /// Set of Extensions for IServiceCollection interface.
+    /// Set of Extensions for the <see cref="IServiceCollection"/> interface.
     /// </summary>
     public static class ServiceCollectionExtensions
     {

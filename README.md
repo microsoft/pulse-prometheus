@@ -1,5 +1,6 @@
 # pulse-prometheus
 [![Build Status](https://github.com/microsoft/pulse-prometheus/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/microsoft/pulse-prometheus/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/microsoft/pulse-prometheus/branch/main/graph/badge.svg?token=q1quhRyQgj)](https://codecov.io/gh/microsoft/pulse-prometheus)
 [![Nuget](https://img.shields.io/nuget/v/pulse.prometheus.svg)](https://www.nuget.org/packages/pulse.prometheus/)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/microsoft/pulse-prometheus/blob/main/LICENSE.txt)
 
@@ -11,6 +12,8 @@ Abstracted metrics libraries are helpful in the event the underlying monitoring 
 * [Requirements](#requirements)
 * [Download](#download)
 * [Best Practices and Usage](#best-practices-and-usage)
+* [Quick Start](#quick-start)
+* [Middleware Extensions](#middleware-extensions)
 * [Depedency Injection](#dependency-injection)
 * [Metric Factory](#metric-factory)
 * [Counter](#counter)
@@ -22,7 +25,7 @@ Abstracted metrics libraries are helpful in the event the underlying monitoring 
 * [Counting Exceptions](#counting-exceptions)
 * [Mutable Labels](#mutable-labels)
 * [Immutable Labels](#immutable-labels)
-* [Switching to A Different Metrics Library?](#switching-to-a-different-metrics-library)
+* [Switching to a Different Metrics Library?](#switching-to-a-different-metrics-library)
 * [Contributing](CONTRIBUTING.md)
 * [Security](SECURITY.md)
 * [Support](SUPPORT.md)
@@ -44,21 +47,56 @@ You are expected to be familiar with:
 * [Prometheus metric types](http://prometheus.io/docs/concepts/metric_types/)
 * [Prometheus metric best practices](http://prometheus.io/docs/practices/instrumentation/#counter-vs.-gauge-vs.-summary)
 
-## Dependency Injection
+## Quick Start
 
-Pulse provides [IServiceCollection](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-6.0) extensions to make it easy for consumers to register implementations for the included [IMetricFactory](#metric-factory).
+1. Configure the endpoint. See [Middleware Extensions](#middleware-extensions).
+1. Register the [IMetricFactory](#metric-factory). See [Dependency Injection](#dependency-injection). Optionally, [create an IMetricFactory](#metric-factory) instead of injecting it.
+1. Use your [IMetricFactory](#metric-factory) to create [counters](#counter), [gauges](#gauge), [histograms](#histogram), and [summaries](#summary).
+1. Use your metrics to do other cool things like [track operation duration](#tracking-operation-duration), [count in-progress operations](#counting-in-progress-operations), and [count exceptions](#counting-exceptions). Also check out how to use [mutable labels](#mutable-labels) and [immutable labels](#immutable-labels)
+
+## Middleware Extensions
+
+Use metric middleware extensions to output metrics to an endpoint.
+
+The default is `/metrics`.
 
 ```csharp
 public class Startup
 {
+    ...
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseEndpoints(endpoints =>
+        {
+            ...
+            endpoints.MapMetrics();
+        });
+    }
+    
+    ...
+}
+```
+
+## Dependency Injection
+
+Use [IServiceCollection](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-6.0) extensions to make it easy for consumers to register implementations for the included [IMetricFactory](#metric-factory).
+
+```csharp
+public class Startup
+{
+    ...
+    
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddMetricFactory();
     }
+    
+    ...
 }
 ```
 
-In subsequent code, request an implementation for the `IMetricFactory` by including it in the constructor of the classes which require it.
+In subsequent code, request an implementation for the [IMetricFactory](#metric-factory) by including it in the constructor of the classes which require it.
 
 ```csharp
 public class ExampleClass
@@ -96,7 +134,9 @@ Counters only increase in value and reset to zero when the process restarts.
 ```csharp
 private static readonly ICounter LogCounter = 
     MyAppMetricFactory.CreateCounter("myapp_number_of_logs_emitted", "Number of logs emitted.");
+
 ...
+
 Log();
 LogCounter.Inc();
 ```
@@ -108,10 +148,14 @@ Gauges can have any numeric value and change arbitrarily.
 ```csharp
 private static readonly IGauge JobQueueGauge = 
     MyAppMetricFactory.CreateGauge("myapp_jobs_queued", "Number of jobs queued.");
+
 ...
+
 jobs.Enqueue(job);
 JobQueueGauge.Inc();
+
 ...
+
 jobs.Dequeue(job);
 JobQueueGauge.Dec();
 ```
@@ -131,7 +175,9 @@ private static readonly IHistogram OrderValueHistogram =
         {
             Buckets = buckets
         });
+
 ...
+
 OrderValueHistogram.Observe(order.TotalValueUsd);
 ```
 
@@ -144,7 +190,9 @@ private static readonly ISummary UploadSizeSummary =
     MyAppMetricFactory.CreateSummary(
         "myapp_upload_size_bytes", 
         "Summary of upload sizes (in bytes) over last 10 minutes.");
+
 ...
+
 UploadSizeSummary.Observe(file.Length);
 ```
 
@@ -163,7 +211,9 @@ private static readonly IHistogram UploadDuration =
         {
             Buckets = buckets
         });
+
 ...
+
 using (UploadDuration.NewTimer())
 {
     Scheduler.Upload(file);
@@ -179,7 +229,9 @@ private static readonly IGauge UploadsInProgress =
     MyAppMetricFactory.CreateGauge(
         "myapp_uploads_in_progress", 
         "Number of upload operations occuring.");
+
 ...
+
 using (UploadsInProgress.TrackInProgress())
 {
     Scheduler.Upload(file);
@@ -195,7 +247,9 @@ private static readonly ICounter FailedExtractions =
     MyAppMetricFactory.CreateCounter(
         "myapp_extractions_failed_total", 
         "Number of extraction operations that failed.");
+
 ...
+
 FailedExtractions.CountExceptions(() => Extractor.Extract(file));
 ```
 
@@ -206,10 +260,7 @@ FailedExtractions.CountExceptions(() => Extractor.Extract(file), IsExtractionRel
 
 bool IsExtractionRelatedException(Exception ex)
 {
-    // Only count ExtractionExceptions.
-    if (ex is ExtractionException)
-        return true;
-    return false;
+    return ex is ExtractionException; // Only count ExtractionExceptions.
 }
 ```
 
@@ -234,7 +285,9 @@ private static readonly ICounter HttpResponseCounter =
         {
             MutableLabelNames = new string[] { "http_method", "http_response_code" }
         });
+
 ...
+
 // Specify the value(s) for the label(s) when you want to call a metric operation.
 HttpResponseCounter.WithLabels("GET", "200").Inc();
 ```
@@ -257,13 +310,15 @@ private static readonly ICounter HttpResponseCounter =
             ImmutableLabels = immutableLabels
             MutableLabelNames = new string[] { "http_response_code" }
         });
+
 ...
+
 // Labels applied to individual instances of the metric.
 HttpResponseCounter.WithLabels("404").Inc();
 HttpResponseCounter.WithLabels("200").Inc();
 ```
 
-## Switching to A Different Metrics Library?
+## Switching to a Different Metrics Library?
 
 * All pulse-projects implement the [pulse](https://github.com/microsoft/pulse) interface, meaning all pulse-projects are interchangable. 
 * If you need to change monitoring systems in the future, you can do so without having to change your projects code!
@@ -273,5 +328,6 @@ HttpResponseCounter.WithLabels("200").Inc();
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
 trademarks or logos is subject to and must follow [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
