@@ -13,9 +13,9 @@
       },
       "pulse": {
         "type": "Direct",
-        "requested": "[1.0.0-alpha.5, )",
-        "resolved": "1.0.0-alpha.5",
-        "contentHash": "Qnh5bewnsd1yAGixVEqdGIZ3UW9UbwkjqF+176BrKbJ23sJ1hLhCVax9zUO7FY731fUQLzE4DBTL0pzoFSw4fw==",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "Y1jlttZsAtizp38kEA8rErSVIwG53CcZsWwLwgF/rMsz6h1YDC9PH1zl4z3z8m5LLTIUmWKztfqnRf7qji26zQ==",
         "dependencies": {
           "StyleCop.Analyzers": "1.1.118"
         }
@@ -124,9 +124,9 @@
       },
       "pulse": {
         "type": "Direct",
-        "requested": "[1.0.0-alpha.5, )",
-        "resolved": "1.0.0-alpha.5",
-        "contentHash": "Qnh5bewnsd1yAGixVEqdGIZ3UW9UbwkjqF+176BrKbJ23sJ1hLhCVax9zUO7FY731fUQLzE4DBTL0pzoFSw4fw==",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "Y1jlttZsAtizp38kEA8rErSVIwG53CcZsWwLwgF/rMsz6h1YDC9PH1zl4z3z8m5LLTIUmWKztfqnRf7qji26zQ==",
         "dependencies": {
           "StyleCop.Analyzers": "1.1.118"
         }
