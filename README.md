@@ -4,7 +4,7 @@
 [![Nuget](https://img.shields.io/nuget/v/pulse.prometheus.svg)](https://www.nuget.org/packages/pulse.prometheus/)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/microsoft/pulse-prometheus/blob/main/LICENSE.txt)
 
-pulse-prometheus is a .NET library implementing the [pulse](https://github.com/microsoft/pulse) interface that abstracts the C# [prometheus-net](https://github.com/prometheus-net/prometheus-net) library.
+pulse-prometheus is a .NET library that implements the [pulse](https://github.com/microsoft/pulse) interface and abstracts the C# [prometheus-net](https://github.com/prometheus-net/prometheus-net) library.
 
 Abstracted metrics libraries are helpful in the event the underlying monitoring system changes. Whether the underlying monitoring library experiences breaking changes or [you decide to do a complete swap of the underlying monitoring library](#switching-to-a-different-metrics-library), rest assured that you will only have to update the abstracted library and not your service code.
 
@@ -89,6 +89,7 @@ public class Startup
     
     public void ConfigureServices(IServiceCollection services)
     {
+        ...
         services.AddMetricFactory();
     }
     
@@ -99,11 +100,11 @@ public class Startup
 In subsequent code, request an implementation for the [IMetricFactory](#metric-factory) by including it in the constructor of the classes which require it.
 
 ```csharp
-public class ExampleClass
+public class Example
 {
     private readonly pulseMetricFactory;
 
-    public ExampleClass(IMetricFactory metricFactory)
+    public Example(IMetricFactory metricFactory)
     {
         pulseMetricFactory = metricFactory;
     }
@@ -138,7 +139,7 @@ private static readonly ICounter LogCounter =
 ...
 
 Log();
-LogCounter.Inc();
+LogCounter.Increment();
 ```
 
 ## Gauge
@@ -152,12 +153,12 @@ private static readonly IGauge JobQueueGauge =
 ...
 
 jobs.Enqueue(job);
-JobQueueGauge.Inc();
+JobQueueGauge.Increment();
 
 ...
 
 jobs.Dequeue(job);
-JobQueueGauge.Dec();
+JobQueueGauge.Decrement();
 ```
 
 ## Histogram
