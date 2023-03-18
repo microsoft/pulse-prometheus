@@ -33,7 +33,7 @@ Abstracted metrics libraries are helpful in the event the underlying monitoring 
 
 ## Requirements
 
-* [.NET 5.0](https://dotnet.microsoft.com/en-us/download/dotnet/5.0) or [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+* [.NET 5.0](https://dotnet.microsoft.com/en-us/download/dotnet/5.0), [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0), or [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
 ## Download
 
