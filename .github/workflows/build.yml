@@ -17,13 +17,17 @@ jobs:
     - name: Build
       run: dotnet build src --configuration Release
     - name: Setup .NET 5.0
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 5.0.x
     - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
+    - name: Setup .NET 7.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
     - name: Component Tests
       run: dotnet test test/ComponentTests --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - name: Unit Tests
@@ -42,5 +46,13 @@ jobs:
         fail_ci_if_error: true
         files: /home/runner/work/pulse-prometheus/pulse-prometheus/test/ComponentTests/coverage.net6.0.opencover.xml,/home/runner/work/pulse-prometheus/pulse-prometheus/test/UnitTests/coverage.net6.0.opencover.xml
         name: net6-code-coverage
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true
+    - name: Upload net7 Code Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: true
+        files: /home/runner/work/pulse-prometheus/pulse-prometheus/test/ComponentTests/coverage.net7.0.opencover.xml,/home/runner/work/pulse-prometheus/pulse-prometheus/test/UnitTests/coverage.net7.0.opencover.xml
+        name: net7-code-coverage
         token: ${{ secrets.CODECOV_TOKEN }}
         verbose: true

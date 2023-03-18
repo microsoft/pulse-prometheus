@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
-    <Authors>dongrote;microsoftielogan</Authors>
+    <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
+    <Authors>dongrote;shinypancake</Authors>
     <IsPackable>false</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>Pulse.Prometheus.ComponentTests</RootNamespace>
@@ -17,7 +17,7 @@
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
-    <PackageReference Include="pulse" Version="1.0.0" />
+    <PackageReference Include="pulse" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Pulse.Prometheus.csproj" />
